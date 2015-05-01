@@ -1,0 +1,192 @@
+/*Kevin Nelson
+ *10/6/2014
+ *ArrayList Abstract Class
+ */
+
+package project5;
+public class ArrayListChanged //extends DataElement
+{
+    int next = 0;
+    public int length;    //to store the length of the list
+    public int maxSize;   //to store the maximum size of the list
+    public DataElement[] list;   //array to hold list elements
+      //Place the definitions of the instance
+      // methods and abstract methods here.
+
+    public ArrayListChanged() {
+    	this(0,0);
+    }
+
+    public ArrayListChanged(int l, int ms) {
+    	this.length = l;
+        this.maxSize = ms;
+        list = new DataElement[maxSize];
+    }
+
+    //public abstract int seqSearch(DataElement searchItem);
+	//public abstract  boolean insert(DataElement insertItem);
+	//public abstract boolean remove(DataElement removeItem);
+
+
+
+	public boolean isEmpty()
+	{
+	    return (length == 0);
+	}
+
+	public boolean isFull()
+	{
+	    return (length == maxSize);
+	}
+
+	public int listSize()
+	{
+	    return length;
+	}
+
+	public int maxListSize()
+	{
+	    return maxSize;
+	}
+
+	public void print()
+	{
+	    for(int i = 0; i < length; i++)
+	    {
+	        System.out.print("Element[" + i + "]" + list[i] + " ");
+	    	if((i + 1) % 5 == 0) System.out.println();
+	    }
+	}
+
+	public boolean isItemAtEqual(int location, DataElement item)
+	{
+	    return (list[location].equals(item));
+	}
+
+	public boolean insert( DataElement newNode ) {
+
+    	if( length >= maxSize )              //array is full
+            return false;
+        //insert copy in next position
+        list[next] = new IntElement( newNode );
+
+        ++next;
+        return true;
+    }
+
+    public boolean insertAt(int location, DataElement insertItem)
+	{
+	    boolean rc = true;
+	    if(location < 0 || location >= maxSize)    //out of range
+	       rc = false;
+	    else
+	       if(length >= maxSize)  //list is full
+	          rc = false;
+	       else
+	       {
+	          for(int i = length; i > location; i--)
+	              list[i] = list[i - 1];           //move the elements down
+	          list[location] = insertItem.getCopy();  //insert the item at
+	                                               //the specified position
+	          length++;      //increment the length
+	       }
+	    return rc;
+	 }//end insertAt
+
+	 public boolean insertEnd(DataElement insertItem)
+	{
+	    boolean rc = true;
+	    if(length >= maxSize)  //the list is full
+	       rc = false;
+	    else
+	    {
+	       list[length] = insertItem.getCopy();   //insert item
+	                                              //at end
+	       length++;       //increment the length
+	    }
+	    return rc;
+	}//end insertEnd
+
+	public boolean removeAt(int location)
+	{
+	   boolean rc = true;
+	   if(location < 0 || location >= length)     //out of range
+	      rc = false;
+	   else
+	   {
+	      for(int i = location; i < length - 1; i++)
+	          list[i] = list[i + 1];
+	      list[length - 1] = null;
+	      length--;
+	    }
+	    return rc;
+	}//end removeAt
+
+	public DataElement retrieveAt(int location)
+	{
+	    if(location < 0 || location >= length) //out of range
+	    {
+	       return null;
+	    }
+	    else
+	       return list[location].getCopy();
+	}//end retrieveAt
+
+	public boolean replaceAt(int location, DataElement repItem)
+	{
+	    boolean rc = true;
+	    if(location < 0 || location >= length)   //out of range
+	       rc = false;
+	    else
+	       list[location].makeCopy(repItem);
+	    return rc;
+	}//end replaceAt
+
+	public void clearList()
+	{
+	    for(int i = 0; i < length; i++)
+	        list[i] = null;
+	    length = 0;
+
+	}//end clearList
+}
+
+
+/*Kevin Nelson
+ *10/6/2014
+ *ArrayList Tester Class
+ */
+
+package project5;
+public class ArrayListTester {
+
+    public static void main(String[] args) {
+
+    	final int LENGTH = 50;
+    	final int MAXSIZE = 100;
+    	System.out.println("Testing constructor\n");
+    	ArrayListChanged s = new ArrayListChanged(LENGTH, MAXSIZE);
+
+    	for (int i = 0; i < LENGTH; i++)
+    	{
+    		s.insert(new IntElement((int)(Math.random()*101)));//test insert method
+    	}
+
+		System.out.println("Testing removeAt method: " + s.removeAt(13));//test removeAt
+		System.out.println("\nTesting replaceAt method: " + s.replaceAt(0, new IntElement(100)));//test replaceAt
+		System.out.println("\nTesting insertEnd method: " + s.insertEnd(new IntElement(101)));//test insertEnd
+		System.out.println("\nTesting insertAt method: " + s.insertAt(50, new IntElement(102)));//test inserAt
+    	System.out.println("\nTesting listSize method: " + s.listSize());//test listSize
+    	System.out.println("\nTesting maxSize method: " + s.maxListSize());//test maxlistSize
+   		System.out.println("\nTesting retrieveAt method: Element[1]= " + s.retrieveAt(1));//test retrieveAt
+		System.out.println("\nTesting isEmpty method: " + s.isEmpty());//test isEmpty
+		System.out.println("\nTesting isFull method: " + s.isFull());//test isFull
+    	s.print();//test print
+		System.out.println("\n\nTesting clearList method. ");
+		s.clearList();//test clearList
+		System.out.println("\nTesting isEmpty method: " + s.isEmpty());// test isEmpty
+
+
+
+    }
+}
