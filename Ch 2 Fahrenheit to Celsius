@@ -1,0 +1,26 @@
+//------------------------
+//	FahrenheitToCelsius.java
+//	Kevin Nelson
+//	COSC 1337
+//	2/6/14
+//------------------------
+
+import javax.swing.JOptionPane;
+
+public class FahrenheitToCelsius
+{
+	public static void main(String[] args)
+	{
+		String degreeString =
+					JOptionPane.showInputDialog("Enter the temperature in Fahrenheit:");
+		double fahrenheit =
+					Double.parseDouble(degreeString.trim());
+
+		double celsius = (5.0 / 9) * (fahrenheit - 32);
+
+		JOptionPane.showMessageDialog(null, fahrenheit + " Fahrenheit  =  " +
+								celsius + " Celsius");
+
+		System.exit(0);
+	}
+}
