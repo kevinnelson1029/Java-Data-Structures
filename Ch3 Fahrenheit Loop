@@ -1,0 +1,54 @@
+//------------------------
+//	FahrenheitLoop.java
+//	Kevin Nelson
+//	COSC 1337
+//	2/18/14
+//------------------------
+
+import javax.swing.JOptionPane;
+
+import java.text.DecimalFormat;
+
+public class FahrenheitLoop
+{
+	public static void main(String[] args)
+	{
+		double input;
+
+		String table = "";
+
+		DecimalFormat degree = new DecimalFormat("###.#");
+
+		double startingFahrenheit =	Double.parseDouble(JOptionPane.showInputDialog
+			("Lets create a Fahrenheit to Celsius conversion chart.\n\nEnter a starting temperature in Fahrenheit:\n ").trim());
+
+		double endingFahrenheit = Double.parseDouble(JOptionPane.showInputDialog
+			("Enter an ending point temperature in Fahrenheit:\n ").trim());
+
+		double increment = Double.parseDouble(JOptionPane.showInputDialog
+			("Enter the number of degrees you\nwould like to increment your chart by:\n ").trim());
+
+		if (startingFahrenheit < endingFahrenheit) {
+
+			for (input = startingFahrenheit; input <= endingFahrenheit; input += increment)
+			{
+					double celsius = (5.0 / 9) * (input - 32);
+					table += ("    " + degree.format(input) +
+						"°F            |           " + degree.format(celsius) + "°C\n");
+			}
+		}else if (startingFahrenheit > endingFahrenheit) {
+
+			for (input = startingFahrenheit; input >= endingFahrenheit; input -= increment)
+			{
+					double celsius = (5.0 / 9) * (input - 32);
+					table += ("    " + degree.format(input) +
+						"°F            |           " + degree.format(celsius) + "°C\n");
+			}
+		}
+		JOptionPane.showMessageDialog(null,"<Fahrenheit>     <Celsius>\n" +
+									   "========================\n" + table);
+
+		System.exit(0);
+	}
+}
+
