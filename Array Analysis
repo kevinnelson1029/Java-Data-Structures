@@ -1,0 +1,143 @@
+/*Kevin Nelson
+ *10/6/2014
+ *ArrayAnalysis Class
+ */
+
+package project5;
+public class ArrayAnalysis extends UnsortedArrayList{
+
+    public ArrayAnalysis() {
+    	this(0,0);
+    }
+
+	public ArrayAnalysis(int l, int ms) {
+    	length = l;
+        maxSize = ms;
+        list = new DataElement[maxSize];
+    }
+
+	public DataElement getLowest()
+    {
+        DataElement minimum = null;
+        if(length > 0)//verify list is not empty
+        {
+            minimum = list[0];
+
+            for(int i = 1; i < length; i++)
+            {
+                if(list[i].compareTo(minimum) < 0)//compareTo method used. Looking for a negative value
+                    minimum = list[i];
+            }
+        }
+        return minimum;
+    }
+
+    public DataElement getHighest()
+    {
+        DataElement maximum = null;
+        if(length > 0)
+        {
+            maximum = list[0];
+            for(int i = 1; i < length; i++)
+            {
+                if(list[i].compareTo(maximum) > 0)//compareTo method used. Looking for a positive value
+                    maximum = list[i];
+            }
+        }
+        return maximum;
+    }
+
+    public int getTotal()
+    {
+        int sum = 0;
+        if(length > 0)
+        {
+            for(int i = 0; i < length; i++)
+            {
+                sum += ((IntElement)list[i]).getNum();//cast as IntElement to get the num value
+            }
+        }
+        return sum;
+    }
+
+    public double getAverage()
+    {
+        double avg = 0.0;
+        if(length > 0)
+        {
+            avg = getTotal() / (double)length;//call getTotal() method and divide by length
+        }
+        return avg;
+    }
+
+    public double getStdDev()
+    {
+        double sdev = 0.0;
+        if(length > 0)
+        {
+            double diff = 0.0;
+            double avg = getAverage();
+
+            for(int i = 0; i < length; i++)
+            {
+                diff += Math.pow(((IntElement)list[i]).getNum() - avg, 2.0);
+            }
+            avg = diff / length;
+
+            sdev = Math.sqrt(avg);
+        }
+        return sdev;
+    }
+
+    public int getOneStdDev()
+    {
+        int count = 0;
+        if(length > 0)
+        {
+            double sdev = Math.abs(getStdDev());
+            double avg = getAverage();
+
+            for(int i = 0; i < length; i++)
+            {
+                int num = ((IntElement)list[i]).getNum();
+                if(num >= (avg - sdev) && num <= (avg + sdev)) count++;
+            }
+        }
+        return count;
+    }
+
+}
+
+
+/*Kevin Nelson
+ *10/6/2014
+ *ArrayAnalysis Tester Class
+ */
+package project5;
+public class ArrayAnalysisTester {
+
+   public static void main(String[] args) {
+        final int LENGTH = 150;
+    	final int MAXSIZE = 200;
+    	System.out.println("Test constructor.");
+    	ArrayAnalysis s = new ArrayAnalysis(LENGTH, MAXSIZE);
+
+    	for (int i = 0; i < LENGTH; i++)
+    	{
+    		s.insert(new IntElement((int)(Math.random()*101)));//test insert method
+    	}
+
+
+    	System.out.println("\nFinding minimum: " + s.getLowest());//testing lowest
+        System.out.println("\nFinding maximum: " + s.getHighest());//testing highest
+        System.out.println("\nFinding sum: " + s.getTotal());//testing sum
+        System.out.printf("\nFinding average: %.2f%n", s.getAverage());//testing average
+        System.out.printf("\nFinding standard deviation: %.2f%n", s.getStdDev());//testing standard deviation
+        System.out.print("\nFinding the count within one standard deviation: " + s.getOneStdDev());//tetsing one standard deviation
+        System.out.printf(" -Percent of: (%.2f%%)%n", (s.getOneStdDev() * 100.0 / LENGTH));
+        System.out.printf("\nNormal Distribution with one Standard Deviation: %.2f results " +
+                "%n", (150 * 0.6827));//explaining how this compares to normal distribution
+        System.out.println();
+        s.print(); //testing print
+	}
+}
