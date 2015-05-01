@@ -1,0 +1,508 @@
+/**
+ Kevin Nelson
+ BinarySearchTree.java
+ */
+
+
+package BinaryTree;
+
+public abstract class StringLinkList {
+
+	protected class Node{
+		protected String info;
+		protected Node link;
+
+		public Node() {
+			info = "";
+			link = null;
+		}
+
+		public Node(String initialInfo)
+		{
+			info = initialInfo;
+			link = null;
+		}
+
+		public Node(String initialInfo, Node initialLink)
+		{
+			info = initialInfo;
+			link = initialLink;
+		}
+
+		public void setInfo(String newInfo)
+		{
+			info = newInfo;
+		}
+
+		public void setLink(Node newLink)
+		{
+			link = newLink;
+		}
+
+		public String getInfo(){
+			return info;
+		}
+
+		public Node getLink(){
+			return link;
+		}
+	}
+
+	protected Node head;
+	protected Node last;
+	protected int count;
+
+    public StringLinkList() {
+    	head = null;
+    	last = null;
+    	count = 0;
+    }
+
+    //copy constructor
+    public StringLinkList(StringLinkList otherList) {
+    	copy(otherList);
+    }
+
+
+    //boolean method to determine if list is empty
+    public boolean isEmpty() {
+    	return (head == null);
+    }
+
+    //method to initialize the list. Same as constructor
+    public void initializeList() {
+    	head = null;
+    	last = null;
+    	count = 0;
+    }
+
+    //method to cycle thru the list and print all info on seperate line
+    public void print() {
+    	Node position;
+    	position = head;
+
+    	while(position != null)//cycle through to the last node
+    	{
+    		for(int i = 1; i < 123; i++)
+    		{
+	    		System.out.print(position.info + " ");
+	    		if (i % 10 == 0) System.out.println();
+	    		position = position.link;
+	    	}
+    	}
+    }
+
+    //method to return the length of the list
+    public int length() {
+    	return count;
+    }
+
+    //method to return the info of the front node
+    public String getFront() {
+    	return head.info;
+    }
+
+    //method to return the info of the last node
+    public String getBack() {
+    	String temp = last.info;
+    	return temp;
+    }
+
+
+    //Method to insert newItem in the front of the list.
+        //Postcondition: first points to the new list
+        //               and newItem is inserted at the
+        //               beginning of the list. Also,
+        //               last points to the last node and
+        //               count is incremented by 1.
+    public void insertFront(String newItem) {
+    	Node newNode = new Node(newItem);//variable to create the new node and assign the the new value in info
+
+    	if (head == null)//if list was empty, make head and last point to newNode
+    	{
+    		head = newNode;
+    		last = head;
+    	}
+    	else
+    	{
+    	newNode.link = head;//insert newNode before head
+    	head = newNode;//make head point to the actual head
+    	}
+    	count++;//increment count
+    }
+
+    //Method to insert newItem at the end of the list.
+        //Postcondition: first points to the new list and
+        //newItem is inserted at the end
+        //of the list. Also, last points to
+        //the last node and
+        //count is incremented by 1.
+    public void insertBack(String newItem){
+		Node newNode = new Node(newItem);//variable to create the new node and assign the the new value in info
+
+    	if (head == null)//if list was empty, make head and last point to newNode
+    	{
+    		head = newNode;
+    		last = head;
+    	}
+    	else
+    	{
+    	last.link = newNode;//insert newNode after last
+    	last = newNode;//make last point to the actual last
+    	}
+    	count++;//increment count
+    }
+
+    //method to make a copy of the passed in list
+    public void copy(StringLinkList list)
+    {
+        Node pointer;
+        Node newNode;
+
+        if(list.head == null)
+        {
+            head = null;
+            last = null;
+            count = 0;
+        }
+        else
+        {
+            count = list.count;
+            pointer = list.head;
+            head = new Node();
+            head.info = pointer.info;
+            head.link = null;
+            last = head;
+            pointer = pointer.link;
+
+            while(pointer != null)
+            {
+                newNode = new Node();
+                newNode.info = pointer.info;
+                newNode.link = null;
+                last.link = newNode;
+                last = newNode;
+                pointer = pointer.link;
+            }
+        }
+    }
+
+    //method to call the copy method and copy the passed in list
+    public void copyList(StringLinkList otherList) {
+    	if(this != otherList)//avoid self copy
+    		copy(otherList);
+    }
+
+    public String toString(){
+    	String str = "";
+
+    	Node p = head;
+    	while(p != null)
+    	{
+    		str += p.info + "\n";
+    		p = p.link;
+    	}
+    	str += "\n";
+    	return str;
+    }
+
+    public void clearList(){
+    	while(!isEmpty())
+    	{
+    		if(head == last)
+    			head = last = null;
+    		else
+    			head = head.link;
+    	}
+    }
+
+    public abstract boolean search(String searchItem);
+    public abstract void deleteNode(String deleteItem);
+
+}
+
+
+/**
+ Kevin Nelson
+ BinarySearchTree.java
+ */
+
+
+package BinaryTree;
+
+public class OrderedLinkList extends StringLinkList{
+
+    public OrderedLinkList() {
+    	super();
+    }
+
+    public OrderedLinkList(OrderedLinkList list) {
+    	super(list);
+    }
+
+    public OrderedLinkList(StringLinkList list) {
+    	super(list);
+    }
+
+
+	//Method to determine whether searchItem is in the list.
+    //Postcondition: Returns true if searchItem is found
+    //in the list; false otherwise.
+	public boolean search(String searchItem) {
+
+	   Node pointer;    // A pointer for traversing the list.
+
+	   pointer = head;  // Start by looking at the head of the list.
+	                   //   (head is an instance variable! )
+
+	   boolean foundData = false;
+
+	   while ( pointer != null && !foundData) //search the list
+	   {
+	         // Go through the list looking at the String in each
+	         // node.  If the String is the one we are looking for,
+	         // return true, since the String has been found in the list.
+	      String pointerInfo = pointer.info;
+	      boolean compare = pointerInfo.equals(searchItem);
+	      if ( compare )
+	         foundData = true;
+	      else
+	     	 pointer = pointer.link;  // Move on to the next node.
+	   }
+
+	   // At this point, we have looked at all the items in the list
+	   // without finding searchItem.  Return false to indicate that
+	   // the item does not exist in the list.
+
+	   return foundData;
+
+	} // end find()
+
+	public void deleteNode(String deleteItem){
+		Node current;//variable to traverse the list
+		Node trailCurrent;//variable just before current
+		boolean found = false;
+
+		if (head == null) // the list is empty
+			System.err.println("Cannot delete from an empty list");
+		else
+		{
+		  	String headInfo = head.info;
+	      	boolean compareHead = headInfo.equals(deleteItem);
+			if (compareHead)
+				head = head.link;
+			if (head == null) //the list had only one node
+				last = null;
+			count--;
+		}
+		if(found)
+			System.out.println("found");
+		else //search the list for the given info
+		{
+			found = false;
+			trailCurrent = head.link; //set trailCurrent to point to the head node.
+			current = head.link; //set current to point to the second node
+
+			while (current != null && !found)
+			{
+				String currentInfo = current.info;
+	     		boolean compareCurrent = currentInfo.equals(deleteItem);
+				if (compareCurrent)
+					found = true;
+				else
+				{
+					trailCurrent = current;
+					current = current.link;
+				}
+			}//end while
+
+			if (found)// if found, delete the node
+			{
+				count--;
+				trailCurrent.link = current.link;
+
+				if (last == current) //node to be deleted was the last node
+					last = trailCurrent; //update the value of last
+			}
+			else
+				System.out.println("Item to be deleted is not in the list.");
+		}//end else
+	}//end deleteNode
+
+
+    public void sort()
+    {
+        //Enter loop only if there are elements in list
+        boolean swapped = (head != null);
+
+        // Only continue loop if a swap is made
+        while (swapped)
+        {
+            swapped = false;
+
+            // Maintain pointers
+            Node curr = head;
+            Node next = curr.link;
+            Node prev = null;
+
+            // Cannot swap last element with its next
+            while (next != null)
+            {
+                // swap if items in wrong order
+                //int x = compare(curr.info, next.info);
+                String currInfo = curr.info;
+                String nextInfo = next.info;
+                int compare = currInfo.compareTo(nextInfo);
+		    	if ( compare > 0 ){
+                    // notify loop to do one more pass
+                    swapped = true;
+
+                    // swap elements (swapping head in special case)
+                    if (curr == head)
+                    {
+                        head = next;
+                        Node temp = next.link;
+                        next.link = curr;
+                        curr.link = temp;
+                        curr = head;
+                    }
+                    else
+                    {
+                        prev.link = curr.link;
+                        curr.link = next.link;
+                        next.link = curr;
+                        curr = next;
+                    }
+                }
+
+                // move to next element
+                prev = curr;
+                curr = curr.link;
+                next = curr.link;
+            }
+        }
+    }
+
+}
+
+
+/**
+ Kevin Nelson
+ BinarySearchTree.java
+ */
+
+
+package BinaryTree;
+import java.io.*;
+import java.util.*;
+
+
+ public class testFileReader extends BinarySearchTree
+ {
+    public static void main(String[] args)
+    {
+    System.out.println("**********Reading File from Source**********");
+    //Name of the file
+    String fileName="Vendor List File2.txt";
+
+    //Instantiate the VendorElement object
+    VendorElement newVendor = new VendorElement();
+
+    //Instantiate the BinarySearchTree object
+    BinarySearchTree vendorList = new BinarySearchTree();
+
+    //Instantiate the OrderedLinkList object
+    OrderedLinkList list = new OrderedLinkList();
+
+
+    try{
+
+    //Create object of FileReader
+    FileReader inputFile = new FileReader(fileName);
+
+    //Instantiate the BufferedReader Class
+    BufferedReader bufferReader = new BufferedReader(inputFile);
+    //Variable to hold the one line data
+    String line;
+    //Variables to hold the tokenized data
+    int VendorID;
+	String VendorName;
+	String VendorCity;
+	String VendorState;
+	int VendorZipCode;
+
+    System.out.println();
+    System.out.println("**********Printing File After Being Read In**********");
+
+    // Read file line by line and print on the console
+    while ((line = bufferReader.readLine()) != null)   {
+            System.out.println(line);
+            // tokenize each number
+            StringTokenizer tokenizer = new StringTokenizer(line, " ");
+            while (tokenizer.hasMoreElements()) {
+                // parse ID integer in file
+                VendorID = Integer.parseInt(tokenizer.nextToken());
+                VendorName = tokenizer.nextToken();
+                VendorCity = tokenizer.nextToken();
+                VendorState = tokenizer.nextToken();
+                //parse Zip Code
+                VendorZipCode = Integer.parseInt(tokenizer.nextToken());
+                //insert the state in linked list
+                list.insertBack(VendorState);
+            	//set up the VendorElement class with the data
+            	newVendor.setVendorInfo (VendorName, VendorID, VendorCity, VendorState, VendorZipCode);
+				//insert the vendor objects into the binary tree
+				vendorList.insert(newVendor);
+            }
+    }
+
+    //Close the buffer reader
+    bufferReader.close();
+    }catch(Exception e){
+            System.out.println("Error while reading file line by line:"
+            + e.getMessage());
+    }
+
+    //sort the list of states
+    list.sort();
+    System.out.println();
+
+    //Print the list
+    System.out.println("**********Printing the List In Order By States Only**********");
+    System.out.println();
+    list.print();
+    System.out.println();
+
+	//test search method in linked list
+	System.out.println();
+	System.out.println("***************************************************");
+	System.out.println("Searching for the State of Texas in list: " + list.search("TX"));
+
+    //determine tree height
+    int treeHeight = vendorList.treeHeight();
+    System.out.println();
+    System.out.println("***************************************************");
+    System.out.println("The height of the tree is: " + treeHeight);
+
+    //search file for given Vendor ID
+    System.out.println();
+    System.out.println("***************************************************");
+    System.out.println("Searching for record given the Vendor ID 122: ");
+    vendorList.searchVendorID(122);
+
+    //search file for given Vendor Name
+    System.out.println();
+    System.out.println("***************************************************");
+    System.out.println("Searching for record given the Vendor Name Zylka-Design: ");
+    vendorList.searchVendorName("Zylka-Design");
+
+    //search file for given Vendor State
+    System.out.println();
+    System.out.println("***************************************************");
+    System.out.println("Searching for record given the Vendor State NV: ");
+    vendorList.searchVendorState("NV");
+
+
+   }
+
+  }
