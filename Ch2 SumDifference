@@ -1,0 +1,37 @@
+//------------------------
+//	SumDifference.java
+//	Kevin Nelson
+//	COSC 1337
+//	2/6/14
+//------------------------
+
+import java.util.Scanner;
+
+public class SumDifference
+{
+	public static void main ( String [ ] args )
+	{
+		Scanner keyboard = new Scanner(System.in);
+
+		System.out.println ("Please enter your mother's age:");
+		int mothersAge = keyboard.nextInt();
+		System.out.println ("You entered: " + mothersAge);
+		System.out.println ();
+
+		System.out.println ("Please enter your age:");
+		int usersAge = keyboard.nextInt();
+		System.out.println ("You entered: " + usersAge);
+		System.out.println ();
+
+		int sum = mothersAge + usersAge;
+		int difference = mothersAge - usersAge;
+		int product = mothersAge * usersAge;
+
+		System.out.println ("When adding the two of your ages together, you have " +
+							sum + " total years.");
+		System.out.println ("Your mother is " + difference +
+							 " years older than you are.");
+		System.out.println ("The product of your ages is: " + product);
+	}
+}
+
