@@ -1,0 +1,40 @@
+//------------------------
+//	CommuteCost.java
+//	Kevin Nelson
+//	COSC 1337
+//	2/6/14
+//------------------------
+
+import javax.swing.JOptionPane;
+
+public class CommuteCost
+{
+    public static void main(String[] args)
+    {
+    	String milesString =
+      	   JOptionPane.showInputDialog("Enter the miles you will commute:");
+      	int distanceMiles =
+      	   Integer.parseInt(milesString.trim());
+
+		String fuelString =
+      	   JOptionPane.showInputDialog("Enter the miles per gallon your vehicle consumes:");
+      	int milesPerGallon =
+      	   Integer.parseInt(fuelString.trim());
+
+      	String priceString =
+      	   JOptionPane.showInputDialog("Without including the $ sign, enter the price per gallon of gas:");
+      	double pricePerGallon =
+      	   Double.parseDouble(priceString.trim());
+
+      	double totalCommuteCost = distanceMiles / milesPerGallon * pricePerGallon;
+
+      	JOptionPane.showMessageDialog( null,"You entered:\n" + distanceMiles + " miles\n" +
+      						milesPerGallon + " miles per gallon\n" +
+      						String.format("$%#.2f", pricePerGallon) + " per gallon\n" +
+      						"\nYour total commute cost will be:\n" +
+      						String.format("$%#.2f", totalCommuteCost));
+
+        System.exit(0);
+
+    }
+}
